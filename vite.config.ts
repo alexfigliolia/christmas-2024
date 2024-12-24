@@ -1,11 +1,9 @@
 import autoprefixer from "autoprefixer";
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig } from "vite";
 import viteCompression from "vite-plugin-compression";
 import { createHtmlPlugin } from "vite-plugin-html";
 import react from "@vitejs/plugin-react";
 import { BuildSettings } from "./devtools/dev-server";
-
-const ENV = loadEnv(process.env.NODE_ENV || "development", process.cwd(), "");
 
 export default defineConfig({
   css: {
@@ -27,6 +25,7 @@ export default defineConfig({
     target: "es2015",
     outDir: "build",
   },
+  base: process.env.NODE_ENV !== "production" ? "/" : "/chistmas-2024",
   esbuild: { target: "es2022" },
   plugins: [
     react({
