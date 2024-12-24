@@ -1,0 +1,54 @@
+* {
+  box-sizing: border-box;
+}
+
+
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  font-family: "Outfit", -apple-system, BlinkMacSystemFont, "“Segoe UI”", Roboto,
+  Helvetica, Arial, sans-serif;
+}
+
+input, label, button {
+  font-family: "Outfit", -apple-system, BlinkMacSystemFont, "“Segoe UI”", Roboto,
+  Helvetica, Arial, sans-serif;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  font-size: 1em;
+  overflow: hidden;
+}
+
+button {
+  padding: 0;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+
+a {
+  border-radius: 0.25em;
+}
+
+h1, h2, h3, h4, h5, h6, p, ol, address {
+  margin: 0;
+}
+
+p {
+  line-height: 1.5;
+}
+
+ol {
+  padding: 0;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance:none;
+}
