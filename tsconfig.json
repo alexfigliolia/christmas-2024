@@ -43,6 +43,9 @@
       "Root/*": [
         "./Root/*"
       ],
+      "State/*": [
+        "./State/*"
+      ],
       "Styles/*": [
         "./Styles/*"
       ],

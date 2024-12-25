@@ -1,0 +1,55 @@
+.names {
+  z-index: 2;
+  height: 80vh;
+  width: 90%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.names.selected > button {
+  translate: 0 100%;
+  opacity: 0;
+  &:nth-of-type(1) {
+    transition-delay: 0.3s;
+  }
+  &:nth-of-type(2) {
+    transition-delay: 0.2s;
+  }
+  &:nth-of-type(3) {
+    transition-delay: 0.1s;
+  }
+  &:nth-of-type(4) {
+    transition-delay: 0s;
+  }
+}
+
+.names > button {
+  border: none;
+  background-color: transparent;
+  font-size: min(5vh, 35px);
+  color: #fff;
+  font-weight: 700;
+  backdrop-filter: blur(2.5px);
+  background-color: rgba(#000, 0.5);
+  padding: 0.25em 0.5em;
+  border-radius: 0.5em;
+  transition-duration: 1s;
+  text-shadow: 0px 0px 1.5vw rgba(#000, 0.25), 0px 0px 0.5vw rgba(#000, 0.35);
+  &:nth-of-type(1) {
+    transition-delay: 1.5s;
+  }
+  &:nth-of-type(2) {
+    transition-delay: 1.6s;
+  }
+  &:nth-of-type(3) {
+    transition-delay: 1.7s;
+  }
+  &:nth-of-type(4) {
+    transition-delay: 1.8s;
+  }
+}

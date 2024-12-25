@@ -1,25 +1,25 @@
 export class Snowfall {
   canvasID: string;
-  program!: WebGLProgram;
+  program?: WebGLProgram;
   canvas: HTMLCanvasElement;
   context: WebGLRenderingContext;
-  snowflakeCount = 200;
-  positionBuffer!: WebGLBuffer;
+  private snowflakeCount = 200;
+  private positionBuffer?: WebGLBuffer;
   private currentFrame: number | null = null;
-  positions = new Float32Array(this.snowflakeCount * 2);
-  sizes = new Float32Array(this.snowflakeCount);
-  speeds = new Float32Array(this.snowflakeCount);
-  drift = new Float32Array(this.snowflakeCount);
+  private positions = new Float32Array(this.snowflakeCount * 2);
+  private sizes = new Float32Array(this.snowflakeCount);
+  private speeds = new Float32Array(this.snowflakeCount);
+  private drift = new Float32Array(this.snowflakeCount);
   constructor(canvasID: string) {
     this.canvasID = canvasID;
-    this.canvas = document.getElementById(this.canvasID) as HTMLCanvasElement;
-    if (!this.canvas) {
-      throw new Error("Cannot find canvas");
-    }
-    this.context = this.canvas.getContext("webgl") as WebGLRenderingContext;
-    if (!this.context) {
-      throw new Error("WebGL Unavailable");
-    }
+    this.canvas = Snowfall.guard(
+      document.getElementById(this.canvasID) as HTMLCanvasElement | null,
+      "Cannot find canvas",
+    );
+    this.context = Snowfall.guard(
+      this.canvas.getContext("webgl"),
+      "WebGL Unavailable",
+    );
   }
 
   public initialize() {
@@ -30,6 +30,19 @@ export class Snowfall {
     this.moveToGPU();
     this.animate();
   }
+
+  public destroy() {
+    window.removeEventListener("resize", this.resize);
+    if (this.currentFrame) {
+      cancelAnimationFrame(this.currentFrame);
+    }
+  }
+
+  public resize = () => {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.context.viewport(0, 0, this.canvas.width, this.canvas.height);
+  };
 
   private createShaders() {
     const vertexShader = this.compileShader(
@@ -70,9 +83,9 @@ export class Snowfall {
       this.positions,
       this.context.DYNAMIC_DRAW,
     );
-
+    const program = Snowfall.guard(this.program);
     const positionLocation = this.context.getAttribLocation(
-      this.program,
+      program,
       "a_position",
     );
     this.context.enableVertexAttribArray(positionLocation);
@@ -93,7 +106,7 @@ export class Snowfall {
       this.context.STATIC_DRAW,
     );
 
-    const sizeLocation = this.context.getAttribLocation(this.program, "a_size");
+    const sizeLocation = this.context.getAttribLocation(program, "a_size");
     this.context.enableVertexAttribArray(sizeLocation);
     this.context.vertexAttribPointer(
       sizeLocation,
@@ -106,6 +119,16 @@ export class Snowfall {
   }
 
   private animate() {
+    this.randomizePositions();
+    const positionBuffer = Snowfall.guard(this.positionBuffer);
+    this.context.bindBuffer(this.context.ARRAY_BUFFER, positionBuffer);
+    this.context.bufferSubData(this.context.ARRAY_BUFFER, 0, this.positions);
+    this.context.clear(this.context.COLOR_BUFFER_BIT);
+    this.context.drawArrays(this.context.POINTS, 0, this.snowflakeCount);
+    this.currentFrame = requestAnimationFrame(() => this.animate());
+  }
+
+  private randomizePositions() {
     for (let i = 0; i < this.snowflakeCount; i++) {
       this.positions[i * 2 + 1] -= this.speeds[i]; // Move down by speed
       this.positions[i * 2] += this.drift[i]; // Add horizontal drift
@@ -119,25 +142,7 @@ export class Snowfall {
         this.positions[i * 2] = Math.random() * 2 - 1; // Wrap x position
       }
     }
-    this.context.bindBuffer(this.context.ARRAY_BUFFER, this.positionBuffer);
-    this.context.bufferSubData(this.context.ARRAY_BUFFER, 0, this.positions);
-    this.context.clear(this.context.COLOR_BUFFER_BIT);
-    this.context.drawArrays(this.context.POINTS, 0, this.snowflakeCount);
-    this.currentFrame = requestAnimationFrame(() => this.animate());
   }
-
-  public destroy() {
-    window.removeEventListener("resize", this.resize);
-    if (this.currentFrame) {
-      cancelAnimationFrame(this.currentFrame);
-    }
-  }
-
-  public resize = () => {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-    this.context.viewport(0, 0, this.canvas.width, this.canvas.height);
-  };
 
   private compileShader(source: string, type: GLenum) {
     const shader = this.context.createShader(type) as WebGLShader;
@@ -150,30 +155,40 @@ export class Snowfall {
     return shader;
   }
 
+  private static guard<T>(
+    value: T | undefined | null,
+    error = "Failed to generate program requirements",
+  ) {
+    if (!value) {
+      throw new Error(error);
+    }
+    return value;
+  }
+
   public static vertexShaderSource = `
-attribute vec2 a_position;
-attribute float a_size;
-varying float v_alpha;
+    attribute vec2 a_position;
+    attribute float a_size;
+    varying float v_alpha;
 
-void main() {
-  gl_PointSize = a_size;
-  gl_Position = vec4(a_position, 0.0, 1.0);
+    void main() {
+      gl_PointSize = a_size;
+      gl_Position = vec4(a_position, 0.0, 1.0);
 
-  // Alpha based on y position (fade snow as it falls)
-  v_alpha = 1.0 - abs(a_position.y);
-}
+      // Alpha based on y position (fade snow as it falls)
+      v_alpha = 1.0 - abs(a_position.y);
+    }
 `;
 
   public static fragmentShaderSource = `
-precision mediump float;
-varying float v_alpha;
+    precision mediump float;
+    varying float v_alpha;
 
-void main() {
-  float dist = length(gl_PointCoord - vec2(0.5));
-  if (dist > 0.5) {
-    discard; // Snowflake shape as a circle
-  }
-  gl_FragColor = vec4(1.0, 1.0, 1.0, v_alpha); // White with alpha
-}
+    void main() {
+      float dist = length(gl_PointCoord - vec2(0.5));
+      if (dist > 0.5) {
+        discard; // Snowflake shape as a circle
+      }
+      gl_FragColor = vec4(1.0, 1.0, 1.0, v_alpha); // White with alpha
+    }
 `;
 }

@@ -9,6 +9,7 @@ export const Snow = memo(function Snow({ ID }: Props) {
       snowfall.destroy();
     };
   }, [ID]);
+
   return <canvas id={ID} />;
 });
 
