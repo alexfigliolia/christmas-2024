@@ -40,6 +40,9 @@
       "Images/*": [
         "./Images/*"
       ],
+      "Models/*": [
+        "./Models/*"
+      ],
       "Root/*": [
         "./Root/*"
       ],
@@ -48,6 +51,9 @@
       ],
       "Styles/*": [
         "./Styles/*"
+      ],
+      "Tools/*": [
+        "./Tools/*"
       ],
       "Types/*": [
         "./Types/*"

@@ -1,25 +1,26 @@
-import { memo, useContext } from "react";
+import { memo } from "react";
 import { useClassNames } from "@figliolia/classnames";
-import { CardContext } from "State/CardContext";
+import { Card, ready, selectActiveName, useCard } from "State/Card";
 import type { Propless } from "Types/React";
 import "./styles.scss";
 
 export const Buttons = memo(
   function Buttons(_: Propless) {
-    const { name, select } = useContext(CardContext);
-    const classes = useClassNames("names", { selected: !!name });
+    const isReady = useCard(ready);
+    const name = useCard(selectActiveName);
+    const classes = useClassNames("names", { selected: !!name, isReady });
     return (
       <div className={classes}>
-        <button onClick={select} data-name="george">
+        <button onClick={Card.select} data-name="george">
           George
         </button>
-        <button onClick={select} data-name="dana">
+        <button onClick={Card.select} data-name="dana">
           Dana
         </button>
-        <button onClick={select} data-name="steveandjen">
+        <button onClick={Card.select} data-name="steveandjen">
           Steve and Jen
         </button>
-        <button onClick={select} data-name="erica">
+        <button onClick={Card.select} data-name="erica">
           Erica
         </button>
       </div>

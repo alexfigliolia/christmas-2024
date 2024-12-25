@@ -1,17 +1,18 @@
+import { useClassNames } from "@figliolia/classnames";
 import { Buttons } from "Components/Buttons";
 import { Card } from "Components/Card";
 import { Snow } from "Components/Snow";
-import { CardContextProvider } from "State/CardContext";
+import { loading, useCard } from "State/Card";
 import "./styles.scss";
 
 export function App() {
+  const isLoading = useCard(loading);
+  const classes = useClassNames("container", { isLoading });
   return (
-    <CardContextProvider>
-      <div className="container">
-        <Snow ID="snowFall" />
-        <Buttons />
-        <Card />
-      </div>
-    </CardContextProvider>
+    <div className={classes}>
+      <Snow ID="snowFall" />
+      <Buttons />
+      <Card />
+    </div>
   );
 }

@@ -8,6 +8,8 @@
   position: relative;
   background: url("Images/background-small.webp") no-repeat 70% 50%;
   background-size: cover;
+  box-shadow: 0em 1vh 4vh rgba(#000, 0.35);
+  transition: opacity 1s 0s, scale 1.5s 1s cubic-bezier(0.83, 0, 0.17, 1);
   @media (min-width: 670px) {
     background: url("Images/background.webp") no-repeat 70% 50%;
     background-size: cover;
@@ -21,3 +23,8 @@
   z-index: 1;
 }
 
+.container.isLoading {
+  opacity: 0;
+  scale: 0.75;
+  transition: all 0s 0s;
+}
