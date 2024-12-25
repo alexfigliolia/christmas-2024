@@ -25,7 +25,7 @@ export default defineConfig({
     target: "es2015",
     outDir: "build",
   },
-  base: process.env.NODE_ENV !== "production" ? "/" : "/chistmas-2024",
+  base: process.env.NODE_ENV !== "production" ? "/" : "/christmas-2024",
   esbuild: { target: "es2022" },
   plugins: [
     react({
