@@ -1,6 +1,6 @@
 export const CARDS = {
   steveandjen:
-    "Merry christams! I hope you both have another wonderful year ahead with lots of laughs, love, and hilarious todler moments",
+    "Merry christams! I hope you both have another wonderful year ahead with lots of laughs, love, and hilarious toddler moments",
   george:
     "Hey dad, merry christmas! I hope the coming year brings everything you're hoping for. Better days ahead!",
   erica:

@@ -1,16 +1,22 @@
 import { memo } from "react";
 import { useClassNames } from "@figliolia/classnames";
-import { Card, ready, selectActiveName, useCard } from "State/Card";
+import { Card, loading, ready, selectActiveName, useCard } from "State/Card";
 import type { Propless } from "Types/React";
 import "./styles.scss";
 
 export const Buttons = memo(
   function Buttons(_: Propless) {
     const isReady = useCard(ready);
+    const isLoading = useCard(loading);
     const name = useCard(selectActiveName);
-    const classes = useClassNames("names", { selected: !!name, isReady });
+    const classes = useClassNames("names", {
+      isSelected: !!name,
+      isLoading,
+      isReady,
+    });
     return (
       <div className={classes}>
+        <h1>Select your name</h1>
         <button onClick={Card.select} data-name="george">
           George
         </button>

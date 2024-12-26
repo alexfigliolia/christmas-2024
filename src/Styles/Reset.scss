@@ -25,6 +25,8 @@ body {
   margin: 0;
   font-size: 1em;
   overflow: hidden;
+  perspective: 200;
+  transform-style: preserve-3d;
 }
 
 button {

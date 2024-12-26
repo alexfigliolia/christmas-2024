@@ -25,6 +25,9 @@
 
 .container.isLoading {
   opacity: 0;
-  scale: 0.75;
+  scale: 0.65;
   transition: all 0s 0s;
+  @media (min-width: 957px) {
+    scale: 0.5;
+  }
 }

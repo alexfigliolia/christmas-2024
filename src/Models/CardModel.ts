@@ -16,7 +16,7 @@ export class CardModel extends State<ICardModel> {
     this.set("loading", false);
     setTimeout(() => {
       this.set("ready", true);
-    }, 1500);
+    }, 2000);
   }
 
   public select = (e: MouseEvent<HTMLButtonElement>) => {
